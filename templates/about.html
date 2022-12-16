@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Page</title>
+</head>
+<body>
+    <div id="head">
+        <a href="{{ url_for('home') }}" id="logo">Route Weather</a>
+        <a href="{{ url_for('map') }}" class="title-button">Map</a>
+        <a href="{{ url_for('contact') }}" class="title-button"> Contact</a>
+        <a href="{{ url_for('software') }}" class="title-button"> Software</a>
+        <p onclick="loadImprove()"  class="title-button">Improve</p>
+    </div>
+    <h1 class="page-title">About RouteWeather</h1>
+        <div id="about-us-container">
+            <p id="about-us-info">RouteWeather is a free-to-use road trip planning tool. RouteWeather is equipped with directions technology assisting you at every turn on the way. On top of that, RouteWeather provides 7-day and 3-day hourly weather forecast data ensuring that you are up to date. RouteWeather also provides a POI search option allowing you to find locations of interest near desired cities. As of now, the application is mainly geared towards North-America, however does offer support for most other countries albeit not as accurate. We are looking to improve our datasets to provide accurate info across the globe. RouteWeather is an application created by a high school student with the goal of providing users with a tool to organize their road trips. The application is free to use as the main goal is not to generate income but to learn the process of starting a business and learning software development. Currently, RouteWeather is a sole proprietorship, however, I am looking to expand in the future and increase the number of staff. The application is still not 100% bug-free, so it would be appreciated if users could report an issue if they ever come across one.</p>     
+    </div>
+
+    <div id="improve-popup" class="popup-container" hidden>
+        <form id="improve-form" action='#' method='POST'>
+        <button class="improve-popup-close" onclick='closeImprovePopup()'>&times;</button>
+          <p class="improve-window-title">Help improve RouteWeather!</p>
+          <p class="improve-window-prompts">Please submit your suggestion bellow.</p>
+          <textarea name="message" type="text" id="improve-message-text" contenteditable="true" required></textarea>
+          <p class="improve-window-prompts">If you would like, please enter your email so we can stay in touch with you.</p>
+          <input name="email" type="email" id="improve-email-text"><br><br>
+          <button id="improve-message-button" type="submit" class="secondary-button">Submit</button>      
+          </form>  
+          </div>
+      <div class="overlay" id="improve-overlay" hidden></div>
+</body>
+
+<script>
+    const imporveForm = document.getElementById('improve-form');
+    imporveForm.addEventListener('submit', function (e){
+    e.preventDefault();
+    const formData = new FormData(imporveForm)
+    formEmail = formData.get('email')
+    formMessage = formData.get('message')
+    alert("Thank you for your submission!")
+    imporveForm.reset()
+    $.ajax({
+      type: "POST",
+      url: "/improve",
+      data: {"email" : formEmail, "message" : formMessage}
+    })
+})
+</script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+  <script
+    src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+  <link rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
+    type="text/css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mapbox-polyline/1.1.1/polyline.js"></script>
+  <script src="{{ url_for('static', filename='js/cities.js') }}"></script>
+  <title>RouteWeather</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #map {
+      height: 54.618vh;
+      width: 62.218vw;
+      padding-bottom: 31px;
+      margin: 1% auto;
+      border: 2px;
+      border-radius: 19px;
+    }
+  </style>
+</head>
+
+<body onload="displayMapAlert()">
+  <div id="map-overflow">
+    <div id="head">
+      <a href="{{ url_for('home') }}" id="logo">Route Weather</a>
+      <a href="{{ url_for('about') }}" class="title-button"> About</a>
+      <a href="{{ url_for('contact') }}" class="title-button"> Contact</a>
+      <a href="{{ url_for('software') }}" class="title-button"> Software</a>
+      <p onclick="loadImprove()" class="title-button">Improve</p>
+    </div>
+    <div id='map'></div>
+    <div id="map-button-container">
+      <div id="map-instructions" onclick="loadInstructions()" class="third-button">Instructions</div>
+      <div class="third-button" id='clear-markers-button' onclick="clearMapMarkers()">Clear Markers</div>
+      <div onclick="loadReport()" class="third-button">Report an Issue</div>
+    </div>
+
+    <div id="switch-button" onclick="switchSearch()" class="secondary-button" type="button">Switch to POI search</div>
+    <div class="select-box">
+      <div class="options-container">
+        <div class="option" id="firstOption">
+          <input type="radio" class="radio" name="category" />
+          <label>Airport</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Art</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Athletic field</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Aquarium</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Bar</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Beach</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Beauty Salon</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Bicycle</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Boating</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Book Store</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Bowling</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Brewery</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Bus Station</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Campground</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Candy Store</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Car Rental</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Car Wash</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Casinos</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Cemetry</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Clothing</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>College</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Computer</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Concert Hall</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Dance</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Day Care</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Dog Park</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Donut</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Dry Cleaning</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>School</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Embassy</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Emergency Room</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Fast Food</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Fire Station</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Florist</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Forest</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Garden</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Gas Station</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Novelty</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Optical</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Gun Range</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Hospital</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Hotel</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Ice Cream</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Jewelry</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Juice Bar</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Lake</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Landmark</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Lodging</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Massage</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Minigolf</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Mountain</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Museum</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Natural Park</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Newsstand</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Night Club</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Nursery</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Park</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Parking</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Petshop</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Pharmacy</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Photography</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Pizza</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Police Station</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Port</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Post Office</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Rest Stop</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Restaurant</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Shopping Center</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Spa</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Sports Store</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>SuperMarket</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Swiming Pool</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Tailor</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Tattoo</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Theater</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Theme Park</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Tour</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Tourist Information</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Toy Shop</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Train Station</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Vehicle Maintenance</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Winery</label>
+        </div>
+        <div class="option">
+          <input type="radio" class="radio" name="category" />
+          <label>Zoo</label>
+        </div>
+      </div>
+      <div class="selected"> Select a POI Type </div>
+      <div class="search-box">
+        <input type="text" placeholder="Start Typing..." />
+      </div>
+    </div>
+  </div>
+  <div class="containerOD"></div>
+  <div class="container"></div>
+
+  <div id="improve-popup" class="popup-container" hidden>
+    <form id="improve-form" action='#' method='POST'>
+    <button class="improve-popup-close" onclick='closeImprovePopup()'>&times;</button>
+      <p class="improve-window-title">Help improve RouteWeather!</p>
+      <p class="improve-window-prompts">Please submit your suggestion bellow.</p>
+      <textarea name="message" type="text" id="improve-message-text" contenteditable="true" required></textarea>
+      <p class="improve-window-prompts">If you would like, please enter your email so we can stay in touch with you.</p>
+      <input name="email" type="email" id="improve-email-text"><br><br>
+      <button id="improve-message-button" type="submit" class="secondary-button">Submit</button>      
+      </form>  
+      </div>
+  <div class="overlay" id="improve-overlay" hidden></div>
+
+  <div id="report-popup" class="popup-container" hidden>
+    <form id="report-form" action='#' method='POST'>
+    <button class="improve-popup-close" onclick='closeReportPopup()'>&times;</button>
+      <p class="improve-window-title">Report an Issue</p>
+      <p class="improve-window-prompts">Please classify your issue.</p>
+      <select name="problem" id="report-select-box" required>
+        <option value="Map">Issue with map</option>
+        <option value="Route">Issue with route</option>
+        <option value="Weather">Issue with weather search/weather data</option>
+        <option value="POI">Issue with POI search/POI data</option>
+        <option value="UI">Issue with user interface</option>
+        <option value="Other">Other</option>
+      </select>
+      <p class="improve-window-prompts">Please submit your issue bellow.</p>
+      <textarea name="message" type="text" id="report-message-text" contenteditable="true" required></textarea>
+      <p class="improve-window-prompts">If you would like, please enter your email so we can stay in touch with you.</p>
+      <input name="email" type="email" id="report-email-text"><br><br>
+      <button id="improve-message-button" type="submit" class="secondary-button">Submit</button>      
+      </form>  
+      </div>
+  <div class="overlay" id="report-overlay" hidden></div>
+  </div>
+  
+</body>
+
+<script>
+  const imporveForm = document.getElementById('improve-form');
+    imporveForm.addEventListener('submit', function (e){
+    e.preventDefault();
+    const formData = new FormData(imporveForm)
+    formEmail = formData.get('email')
+    formMessage = formData.get('message')
+    alert("Thank you for your submission!")
+    imporveForm.reset()
+    $.ajax({
+      type: "POST",
+      url: "/improve",
+      data: {"email" : formEmail, "message" : formMessage}
+    })
+})
+
+const reportForm = document.getElementById('report-form');
+    reportForm.addEventListener('submit', function (e){
+    e.preventDefault();
+    const formData = new FormData(reportForm)
+    formProblem = formData.get('problem')
+    formEmail = formData.get('email')
+    formMessage = formData.get('message')
+    console.log(formProblem, formEmail, formMessage)
+    alert("Thank you for your submission!")
+    reportForm.reset()
+    $.ajax({
+      type: "POST",
+      url: "/report",
+      data: {"problem" : formProblem, "email" : formEmail, "message" : formMessage}
+    })
+
+    function displayMapAlert(){
+      alert("This is just a reminder that RouteWeather is mostly compitable with North American cities. Cities in other countries may not be accurate. Please report anything you see.")
+    }
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+    integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+</html>

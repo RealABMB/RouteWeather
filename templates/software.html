@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+</head>
+<body>
+    <div id="head">
+        <a href="{{ url_for('home') }}" id="logo">Route Weather</a>
+        <a href="{{ url_for('map') }}" class="title-button">Map</a>
+        <a href="{{ url_for('about') }}" class="title-button"> About</a>
+        <a href="{{ url_for('contact') }}" class="title-button"> Contact</a>
+        <p onclick="loadImprove()"  class="title-button">Improve</p>
+    </div>
+    <h1 class="page-title">Software Used</h1>
+    <h2>RouteWeather is powered by two APIs. This page serves as a citation for those two APIs.</h2>
+
+    <div id="about-software-container">
+        <div id="about-software-info">
+            <p class="api-title">Mapbox API</p>
+            <p class="api-info">Mapbox is at the route of Routeweather. The API provides mapping along with navigation, POIs and polyline.</p>
+            <a class="api-info" id="api-link" href="https://www.mapbox.com/">Mapbox:   https://www.mapbox.com/</a>
+            <p class="api-title">OpenWeatherMap API</p>
+            <p class="api-info">OpenWeatherMap API is used to retrive weather information on desired locations.</p>
+            <a class="api-info" id="api-link" href="https://openweathermap.org/">OpenWeatherMap: https://openweathermap.org/</a>
+        </div>
+
+        <div id="about-software-logos"> 
+            <img class="software-image" src="{{ url_for('static', filename='images/mapboxlogoImage.png') }}"/>
+            <img class="software-image" src="{{ url_for('static', filename='images/OpenWeatherMapLogo.png') }}"/>
+    </div>
+
+    <div id="improve-popup" class="popup-container" hidden>
+        <form id="improve-form" action='#' method='POST'>
+        <button class="improve-popup-close" onclick='closeImprovePopup()'>&times;</button>
+          <p class="improve-window-title">Help improve RouteWeather!</p>
+          <p class="improve-window-prompts">Please submit your suggestion bellow.</p>
+          <textarea name="message" type="text" id="improve-message-text" contenteditable="true" required></textarea>
+          <p class="improve-window-prompts">If you would like, please enter your email so we can stay in touch with you.</p>
+          <input name="email" type="email" id="improve-email-text"><br><br>
+          <button id="improve-message-button" type="submit" class="secondary-button">Submit</button>      
+          </form>  
+          </div>
+      <div class="overlay" id="improve-overlay" hidden></div>
+</body>
+
+<script>
+    const imporveForm = document.getElementById('improve-form');
+    imporveForm.addEventListener('submit', function (e){
+    e.preventDefault();
+    const formData = new FormData(imporveForm)
+    formEmail = formData.get('email')
+    formMessage = formData.get('message')
+    alert("Thank you for your submission!")
+    imporveForm.reset()
+    $.ajax({
+      type: "POST",
+      url: "/improve",
+      data: {"email" : formEmail, "message" : formMessage}
+    })
+})
+</script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+</html>
