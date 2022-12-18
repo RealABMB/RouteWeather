@@ -286,7 +286,12 @@ function setupMap(center) {
             geocoderList = polyline.decode(event.route[0].geometry)
                   //Check if route is large enough to calculate weather using sorted lat lng arrays
         if ((endSort[1] - endSort[0]) < 1 && (endSortLat[1] - endSortLat[0]) < 1) {
-            alert('Route is too small to calculate weather.')
+            alert('Route is too small to calculate waypoint weather.')
+
+            //Get weather data for origin
+            getWeatherData()
+            //Get weather data for destination
+            getWeatherData2()
         } else {
             if (orgPoint.length === 1 && destPoint.length === 1) {
                 //Get weather data for origin
