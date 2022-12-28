@@ -1,11 +1,11 @@
 from datetime import datetime
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-app = Flask(__name__)
+application = Flask(__name__)
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///contact.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Gopesh123@routeweather.cezjcubxqftc.us-east-1.rds.amazonaws.com/routeweather'
-db = SQLAlchemy(app)
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Gopesh123@routeweather.cezjcubxqftc.us-east-1.rds.amazonaws.com/routeweather'
+db = SQLAlchemy(application)
 
 
 class ContactMessage(db.Model):
@@ -16,12 +16,12 @@ class ContactMessage(db.Model):
     problem = db.Column(db.String(200), nullable=True)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
-@app.route('/')
+@application.route('/')
 def home():
     return render_template('home.html')
 
 
-@app.route('/contact', methods=['POST', 'GET'])
+@application.route('/contact', methods=['POST', 'GET'])
 def contact():
     if request.method == "POST":
         contact_message_info = ContactMessage(
@@ -36,7 +36,7 @@ def contact():
         return render_template('contact.html')
 
 
-@app.route('/improve', methods=['POST', 'GET'])
+@application.route('/improve', methods=['POST', 'GET'])
 def improve():
     if request.method == "POST":
         contact_message_info = ContactMessage(
@@ -51,7 +51,7 @@ def improve():
         return redirect(request.referrer)
 
 
-@app.route('/report', methods=['POST', 'GET'])
+@application.route('/report', methods=['POST', 'GET'])
 def report():
     if request.method == "POST":
         contact_message_info = ContactMessage(
@@ -66,21 +66,21 @@ def report():
         return redirect(request.referrer)
 
 
-@app.route('/about')
+@application.route('/about')
 def about():
     return render_template('about.html')
 
 
-@app.route('/software')
+@application.route('/software')
 def software():
     return render_template('software.html')
 
 
-@app.route('/map')
+@application.route('/map')
 def map():
     return render_template('map.html')
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=3600)
+    application.run(host="0.0.0.0", port=3600)
 
