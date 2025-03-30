@@ -169,11 +169,11 @@ const weatherForecastEl = document.getElementById('weather-forecast');
 const currentTempEl = document.getElementById('current-temp');
 
 //Openweathermap api key
-const API_KEY = '007bc901960cea6e7f996fde36d76ed7';
+const API_KEY = '';
 
 //Mapbox api key
 mapboxgl.accessToken =
-    "pk.eyJ1IjoibGlscGVzaCIsImEiOiJjbDFvN2oxY2MwNDZpM2p1aXFlZ3M1bXZxIn0.-gV7jGrALXS7PCVi3qjfsw"
+    ""
 
 //Get position current position
 navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
