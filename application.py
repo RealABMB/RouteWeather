@@ -3,8 +3,7 @@ from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 application = Flask(__name__)
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///contact.db'
-application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Gopesh123@routeweather.cezjcubxqftc.us-east-1.rds.amazonaws.com/routeweather'
+application.config['SQLALCHEMY_DATABASE_URI'] = ''
 db = SQLAlchemy(application)
 
 
